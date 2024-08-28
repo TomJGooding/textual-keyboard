@@ -15,6 +15,8 @@ SHIFT_MODIFIER_KEYS = [
     "asterisk",
     "left_parenthesis",
     "right_parenthesis",
+    "underscore",
+    "plus",
 ]
 
 
@@ -126,8 +128,8 @@ class Keyboard(Widget):
         yield Button("*\n8", classes="num_8 asterisk right-hand")
         yield Button("(\n9", classes="num_9 left_parenthesis right-hand")
         yield Button(")\n0", classes="num_0 right_parenthesis right-hand")
-        yield Button("_\n—", classes="minus right-hand")
-        yield Button("+\n=", classes="equals_sign right-hand")
+        yield Button("_\n—", classes="minus underscore right-hand")
+        yield Button("+\n=", classes="equals_sign plus right-hand")
         yield Button("backspace", classes="backspace right-hand")
 
         yield Button("tab", classes="tab left-hand")
