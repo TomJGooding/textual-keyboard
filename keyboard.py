@@ -136,8 +136,8 @@ class Keyboard(Widget):
         for idx, key in enumerate(list("QWERTYUIOP")):
             hand = "left-hand" if idx < 5 else "right-hand"
             yield Button(key, classes=f"{key.lower()} {hand}")
-        yield Button("{\n[", classes="right-hand")
-        yield Button("}\n]", classes="right-hand")
+        yield Button("{\n[", classes="left_square_bracket right-hand")
+        yield Button("}\n]", classes="right_square_bracket right-hand")
         yield Button("|\n\\", classes="right-hand")
 
         yield Button("caps lock", classes="caps_lock left-hand")
