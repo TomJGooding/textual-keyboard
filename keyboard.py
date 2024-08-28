@@ -103,16 +103,16 @@ class Keyboard(Widget):
 
     def compose(self) -> ComposeResult:
         yield Button("esc", classes="escape left-hand")
-        yield Button("!\n1", classes="left-hand")
-        yield Button("@\n2", classes="left-hand")
-        yield Button("#\n3", classes="left-hand")
-        yield Button("$\n4", classes="left-hand")
-        yield Button("%\n5", classes="left-hand")
-        yield Button("^\n6", classes="right-hand")
-        yield Button("&\n7", classes="right-hand")
-        yield Button("*\n8", classes="right-hand")
-        yield Button("(\n9", classes="right-hand")
-        yield Button(")\n0", classes="right-hand")
+        yield Button("!\n1", classes="num_1 left-hand")
+        yield Button("@\n2", classes="num_2 left-hand")
+        yield Button("#\n3", classes="num_3 left-hand")
+        yield Button("$\n4", classes="num_4 left-hand")
+        yield Button("%\n5", classes="num_5 left-hand")
+        yield Button("^\n6", classes="num_6 right-hand")
+        yield Button("&\n7", classes="num_7 right-hand")
+        yield Button("*\n8", classes="num_8 right-hand")
+        yield Button("(\n9", classes="num_9 right-hand")
+        yield Button(")\n0", classes="num_0 right-hand")
         yield Button("_\n—", classes="right-hand")
         yield Button("+\n=", classes="right-hand")
         yield Button("backspace", classes="backspace right-hand")
@@ -166,9 +166,13 @@ class KeyboardApp(App):
     def on_key(self, event: events.Key) -> None:
         key_no_modifier = event.key
         modifier_key: str | None = None
+
         if key_no_modifier.isupper():
             modifier_key = "shift"
             key_no_modifier = key_no_modifier.lower()
+
+        if key_no_modifier.isdigit():
+            key_no_modifier = f"num_{key_no_modifier}"
 
         key_button = self.query_one(f".{key_no_modifier}", Button)
 
