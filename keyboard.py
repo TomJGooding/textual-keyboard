@@ -20,6 +20,7 @@ SHIFT_MODIFIER_KEYS = [
     "left_curly_bracket",
     "right_curly_bracket",
     "colon",
+    "quotation_mark",
 ]
 
 
@@ -152,7 +153,7 @@ class Keyboard(Widget):
             hand = "left-hand" if idx < 5 else "right-hand"
             yield Button(key, classes=f"{key.lower()} {hand}")
         yield Button(":\n;", classes="semicolon colon right-hand")
-        yield Button("“\n'", classes="right-hand")
+        yield Button("“\n'", classes="apostrophe quotation_mark right-hand")
         yield Button("enter", classes="enter right-hand")
 
         yield Button("shift", classes="shift left-hand")
