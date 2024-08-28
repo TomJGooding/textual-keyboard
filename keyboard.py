@@ -1,5 +1,6 @@
 from textual import events
 from textual.app import App, ComposeResult
+from textual.css.query import NoMatches
 from textual.widget import Widget
 from textual.widgets import Button
 
@@ -163,7 +164,10 @@ class KeyboardApp(App):
         yield Keyboard()
 
     def on_key(self, event: events.Key) -> None:
-        self.log(event.key)
+        try:
+            self.query_one(f".{event.key}", Button).press()
+        except NoMatches:
+            self.log(f"{event.key} not implemented")
 
 
 if __name__ == "__main__":
