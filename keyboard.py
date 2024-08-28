@@ -1,7 +1,27 @@
 from textual import events
 from textual.app import App, ComposeResult
+from textual.css.query import NoMatches
 from textual.widget import Widget
 from textual.widgets import Button
+
+SHIFT_MODIFIER_KEYS = [
+    "exclamation_mark",
+    "at",
+    "number_sign",
+    "dollar_sign",
+    "percent_sign",
+    "circumflex_accent",
+    "ampersand",
+    "asterisk",
+    "left_parenthesis",
+    "right_parenthesis",
+    "underscore",
+    "plus",
+    "left_curly_bracket",
+    "right_curly_bracket",
+    "colon",
+    "quotation_mark",
+]
 
 
 class Keyboard(Widget):
@@ -102,34 +122,38 @@ class Keyboard(Widget):
 
     def compose(self) -> ComposeResult:
         yield Button("esc", classes="escape left-hand")
-        yield Button("!\n1", classes="left-hand")
-        yield Button("@\n2", classes="left-hand")
-        yield Button("#\n3", classes="left-hand")
-        yield Button("$\n4", classes="left-hand")
-        yield Button("%\n5", classes="left-hand")
-        yield Button("^\n6", classes="right-hand")
-        yield Button("&\n7", classes="right-hand")
-        yield Button("*\n8", classes="right-hand")
-        yield Button("(\n9", classes="right-hand")
-        yield Button(")\n0", classes="right-hand")
-        yield Button("_\n—", classes="right-hand")
-        yield Button("+\n=", classes="right-hand")
+        yield Button("!\n1", classes="num_1 exclamation_mark left-hand")
+        yield Button("@\n2", classes="num_2 at left-hand")
+        yield Button("#\n3", classes="num_3 number_sign left-hand")
+        yield Button("$\n4", classes="num_4 dollar_sign left-hand")
+        yield Button("%\n5", classes="num_5 percent_sign left-hand")
+        yield Button("^\n6", classes="num_6 circumflex_accent right-hand")
+        yield Button("&\n7", classes="num_7 ampersand right-hand")
+        yield Button("*\n8", classes="num_8 asterisk right-hand")
+        yield Button("(\n9", classes="num_9 left_parenthesis right-hand")
+        yield Button(")\n0", classes="num_0 right_parenthesis right-hand")
+        yield Button("_\n—", classes="minus underscore right-hand")
+        yield Button("+\n=", classes="equals_sign plus right-hand")
         yield Button("backspace", classes="backspace right-hand")
 
         yield Button("tab", classes="tab left-hand")
         for idx, key in enumerate(list("QWERTYUIOP")):
             hand = "left-hand" if idx < 5 else "right-hand"
             yield Button(key, classes=f"{key.lower()} {hand}")
-        yield Button("{\n[", classes="right-hand")
-        yield Button("}\n]", classes="right-hand")
+        yield Button(
+            "{\n[", classes="left_square_bracket left_curly_bracket right-hand"
+        )
+        yield Button(
+            "}\n]", classes="right_square_bracket right_curly_bracket right-hand"
+        )
         yield Button("|\n\\", classes="right-hand")
 
         yield Button("caps lock", classes="caps_lock left-hand")
         for idx, key in enumerate(list("ASDFGHJKL")):
             hand = "left-hand" if idx < 5 else "right-hand"
             yield Button(key, classes=f"{key.lower()} {hand}")
-        yield Button(":\n;", classes="right-hand")
-        yield Button("“\n'", classes="right-hand")
+        yield Button(":\n;", classes="semicolon colon right-hand")
+        yield Button("“\n'", classes="apostrophe quotation_mark right-hand")
         yield Button("enter", classes="enter right-hand")
 
         yield Button("shift", classes="shift left-hand")
@@ -163,7 +187,36 @@ class KeyboardApp(App):
         yield Keyboard()
 
     def on_key(self, event: events.Key) -> None:
-        self.log(event.key)
+        key_no_modifier = event.key
+        modifier_key: str | None = None
+
+        if key_no_modifier.isupper():
+            modifier_key = "shift"
+            key_no_modifier = key_no_modifier.lower()
+
+        if key_no_modifier.isdigit():
+            key_no_modifier = f"num_{key_no_modifier}"
+
+        if key_no_modifier in SHIFT_MODIFIER_KEYS:
+            modifier_key = "shift"
+
+        key_button = self.query_one(f".{key_no_modifier}", Button)
+
+        if modifier_key is not None:
+            if key_button.has_class("left-hand"):
+                modifier_hand = "right-hand"
+            elif key_button.has_class("right-hand"):
+                modifier_hand = "left-hand"
+            else:
+                assert False, "unreachable"
+
+            modifier_button = self.query_one(
+                f".{modifier_hand}.{modifier_key}",
+                Button,
+            )
+            modifier_button.press()
+
+        key_button.press()
 
 
 if __name__ == "__main__":
