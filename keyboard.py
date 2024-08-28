@@ -164,10 +164,29 @@ class KeyboardApp(App):
         yield Keyboard()
 
     def on_key(self, event: events.Key) -> None:
-        try:
-            self.query_one(f".{event.key}", Button).press()
-        except NoMatches:
-            self.log(f"{event.key} not implemented")
+        key_no_modifier = event.key
+        modifier_key: str | None = None
+        if key_no_modifier.isupper():
+            modifier_key = "shift"
+            key_no_modifier = key_no_modifier.lower()
+
+        key_button = self.query_one(f".{key_no_modifier}", Button)
+
+        if modifier_key is not None:
+            if key_button.has_class("left-hand"):
+                modifier_hand = "right-hand"
+            elif key_button.has_class("right-hand"):
+                modifier_hand = "left-hand"
+            else:
+                assert False, "unreachable"
+
+            modifier_button = self.query_one(
+                f".{modifier_hand}.{modifier_key}",
+                Button,
+            )
+            modifier_button.press()
+
+        key_button.press()
 
 
 if __name__ == "__main__":
