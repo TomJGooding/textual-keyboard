@@ -19,6 +19,7 @@ SHIFT_MODIFIER_KEYS = [
     "plus",
     "left_curly_bracket",
     "right_curly_bracket",
+    "colon",
 ]
 
 
@@ -150,7 +151,7 @@ class Keyboard(Widget):
         for idx, key in enumerate(list("ASDFGHJKL")):
             hand = "left-hand" if idx < 5 else "right-hand"
             yield Button(key, classes=f"{key.lower()} {hand}")
-        yield Button(":\n;", classes="right-hand")
+        yield Button(":\n;", classes="semicolon colon right-hand")
         yield Button("“\n'", classes="right-hand")
         yield Button("enter", classes="enter right-hand")
 
