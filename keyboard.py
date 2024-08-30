@@ -21,6 +21,7 @@ SHIFT_MODIFIER_KEYS = [
     "right_curly_bracket",
     "colon",
     "quotation_mark",
+    "vertical_line",
 ]
 
 
@@ -146,7 +147,7 @@ class Keyboard(Widget):
         yield Button(
             "}\n]", classes="right_square_bracket right_curly_bracket right-hand"
         )
-        yield Button("|\n\\", classes="right-hand")
+        yield Button("|\n\\", classes="backslash vertical_line right-hand")
 
         yield Button("caps lock", classes="caps_lock left-hand")
         for idx, key in enumerate(list("ASDFGHJKL")):
